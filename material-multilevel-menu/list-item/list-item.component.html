@@ -1,0 +1,45 @@
+<div class="amml-menu-container">
+  <!-- Base Template rendering condition starts -->
+  <div *ngIf="nodeConfiguration.customTemplate && !node.hidden;else baseTemplate"
+       [ngClass]="selectedListClasses"
+       [ngStyle]="getListStyle()"
+       (click)="expand(node)">
+    <ng-container [ngTemplateOutlet]="listTemplate"
+                  [ngTemplateOutletContext]="{item: node, configuration: nodeConfiguration}">
+    </ng-container>
+  </div>
+  <!-- Base Template rendering condition ends -->
+
+  <!-- Recursive Template calls begins -->
+  <div *ngIf="hasItems() && expanded" [@SlideInOut] [dir]="isRtlLayout() ? 'rtl' : 'ltr'" [ngClass]="classes">
+    <jhi-list-item *ngFor="let singleNode of nodeChildren"
+                  [nodeConfiguration]='nodeConfiguration'
+                  [node]="singleNode"
+                  [level]="level + 1"
+                  [submenuLevel]="0"
+                  [selectedNode]='selectedNode'
+                  [nodeExpandCollapseStatus]='nodeExpandCollapseStatus'
+                  (selectedItem)="selectedListItem($event)"
+                  [listTemplate]="listTemplate">
+    </jhi-list-item>
+  </div>
+</div>
+<!-- Recursive Template calls ends -->
+
+<!-- Base Template starts from here -->
+<ng-template #baseTemplate>
+  <mat-list-item matRipple
+                 *ngIf="!node.hidden"
+                 title="{{node.label}}"
+                 [matRippleDisabled]="node.disabled?true:false"
+                 [ngClass]="selectedListClasses"
+                 [ngStyle]="getListStyle()"
+                 (click)="expand(node)">
+    <ng-container *ngTemplateOutlet="linkTemplate"></ng-container>
+  </mat-list-item>
+  <mat-divider *ngIf="nodeConfiguration.useDividers"></mat-divider>
+</ng-template>
+
+<ng-template #linkTemplate>
+  <jhi-list-item-content class="filled" [node]="node" [isRtlLayout]="isRtlLayout()"></jhi-list-item-content>
+</ng-template>

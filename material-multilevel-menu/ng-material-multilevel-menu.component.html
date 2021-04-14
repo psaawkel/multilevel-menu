@@ -1,0 +1,16 @@
+<div [ngClass]="getClassName()" [ngStyle]="getGlobalStyle()" *ngIf='!isInvalidData && items.length !== 0' [dir]="isRtlLayout() ? 'rtl' : 'ltr'">
+  <mat-list>
+    <jhi-list-item
+      *ngFor="let node of items"
+      [nodeConfiguration]='nodeConfig'
+      [node]='node'
+      [level]="1"
+      [submenuLevel]="0"
+      [selectedNode]='currentNode'
+      [nodeExpandCollapseStatus]='nodeExpandCollapseStatus'
+      (selectedItem)="selectedListItem($event)"
+      [listTemplate] = "listTemplate"
+    >
+    </jhi-list-item>
+  </mat-list>
+</div>
